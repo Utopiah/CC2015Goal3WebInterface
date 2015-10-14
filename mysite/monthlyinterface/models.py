@@ -1,7 +1,14 @@
+import datetime
+
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
 class Creation(models.Model):
-    desire_theme = models.CharField(max_length=200)
+    desired_theme = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date created')
+    def __str__(self):
+        return self.desired_theme
+    def was_published_recently(self):
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
