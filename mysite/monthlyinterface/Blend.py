@@ -149,4 +149,5 @@ def saveGeneratedImageToLibrary(file_path, image):
 
 def BlendMe(arguments)
 	result = blendNewImagesFromThemes(['Maldives','Diving'])
-    return "Blended " + arguments + " " + result.filePath
+    return result.filePath
+    # should return instead the ID then redirect there

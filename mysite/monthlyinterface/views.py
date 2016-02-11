@@ -14,5 +14,10 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def detail(request, creation_id):
-    return HttpResponse(Creation.objects.get(pk=creation_id).generate())
-    return HttpResponse("(UI exploration https://wireframe.cc/74FKag ) You are looking at creation %s.<br>Fork it button." % creation_id)
+    result = Creation.objects.get(pk=creation_id).generate()
+    template = loader.get_template('monthlyinterface/details.html')
+    context = {
+        'image': result['image']
+    }
+    return HttpResponse(template.render(context, request))
+    # return HttpResponse("(UI exploration https://wireframe.cc/74FKag ) You are looking at creation %s.<br>Fork it button." % creation_id)

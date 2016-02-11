@@ -38,11 +38,14 @@ class Creation(models.Model):
         # note that this should NOT be a domain specific application requiring its heavy pip install
             # but... until there are 2 or 3 of those... it better be an existing mess than an empty theoretical perfection
 
-        #from Blend import BlendMe
-        #result = BlendMe(self.desired_theme)
         result = self.desired_theme
+        return dict(result=result, image=self.file_path)
         return "A blend between all or at least most of the themes " + result + " for the specified format " + '<img src="/'+self.file_path+'">'
         # fails for implicit to str " for the specified format (" + self.desired_format + ")"
         # problem between Python2 and Python3...
         # cheating until it (month1) becomes a library compatible to python3
         # https://github.com/Utopiah/CC2015Goal3Month1/blob/master/BlendMeAPicture.py
+    def fork(self):
+        from Blend import BlendMe
+        result = BlendMe(self.desired_theme)
+        return "A blend between all or at least most of the themes " + result + " for the specified format " + '<img src="/'+self.file_path+'">'
