@@ -34,17 +34,10 @@ class Creation(models.Model):
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
     def generate(self):
-        # done using Jupyter Notebook
         # note that this should NOT be a domain specific application requiring its heavy pip install
             # but... until there are 2 or 3 of those... it better be an existing mess than an empty theoretical perfection
-
-        result = self.desired_theme
-        return dict(result=result, image=self.file_path)
-        return "A blend between all or at least most of the themes " + result + " for the specified format " + '<img src="/'+self.file_path+'">'
-        # fails for implicit to str " for the specified format (" + self.desired_format + ")"
-        # problem between Python2 and Python3...
-        # cheating until it (month1) becomes a library compatible to python3
-        # https://github.com/Utopiah/CC2015Goal3Month1/blob/master/BlendMeAPicture.py
+        themes = self.desired_theme
+        return dict(themes=themes, image=self.file_path)
     def fork(self):
         from Blend import BlendMe
         result = BlendMe(self.desired_theme)

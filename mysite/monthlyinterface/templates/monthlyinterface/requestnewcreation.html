@@ -1,0 +1,6 @@
+<form action="{% url 'requestnewcreation' %}" method="post">
+{% csrf_token %}
+Type below the themes you would like your postcard to have : 
+<input type="text" class="form-control" name="themes" required autofocus>
+<input type="submit" value="Create" />
+</form>
