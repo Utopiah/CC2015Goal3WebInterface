@@ -24,9 +24,16 @@ def detail(request, creation_id):
     # return HttpResponse("(UI exploration https://wireframe.cc/74FKag ) You are looking at creation %s.<br>Fork it button." % creation_id)
 
 def requestnewcreation(request):
-    #result = Creation.objects.get(pk=creation_id).generate()
     template = loader.get_template('monthlyinterface/requestnewcreation.html')
     context = {}
     return HttpResponse(template.render(context, request))
     
 
+def requestednewcreation(request):
+    # should rely instead on proper NameForm and Form class
+    themes = request.POST['themes'];
+    #result = Creation.objects.get(pk=creation_id).generate()
+    template = loader.get_template('monthlyinterface/requestednewcreation.html')
+    context = { 'themes': themes }
+    return HttpResponse(template.render(context, request))
+    # could also redirect after query is done
