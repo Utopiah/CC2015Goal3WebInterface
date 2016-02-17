@@ -34,6 +34,7 @@ class Creation(models.Model):
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
     def generate(self):
+        #misleading name
         # note that this should NOT be a domain specific application requiring its heavy pip install
             # but... until there are 2 or 3 of those... it better be an existing mess than an empty theoretical perfection
         themes = self.desired_theme
@@ -41,4 +42,6 @@ class Creation(models.Model):
     def fork(self):
         from Blend import BlendMe
         result = BlendMe(self.desired_theme)
-        return "A blend between all or at least most of the themes " + result + " for the specified format " + '<img src="/'+self.file_path+'">'
+        themes = self.desired_theme
+        return dict(themes=themes, image=self.file_path)
+        #return "A blend between all or at least most of the themes " + result + " for the specified format " + '<img src="/'+self.file_path+'">'

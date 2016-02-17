@@ -15,6 +15,7 @@ def index(request):
 
 def detail(request, creation_id):
     result = Creation.objects.get(pk=creation_id).generate()
+    #misleading name
     template = loader.get_template('monthlyinterface/details.html')
     context = {
         'themes': result['themes'],
@@ -30,6 +31,8 @@ def requestnewcreation(request):
     
 
 def requestednewcreation(request):
+    #result = Creation.objects.get(pk=creation_id).fork()
+        # should include the creation_id of the object forked from
     # should rely instead on proper NameForm and Form class
     themes = request.POST['themes'];
     #result = Creation.objects.get(pk=creation_id).generate()
