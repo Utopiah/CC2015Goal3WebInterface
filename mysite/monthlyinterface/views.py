@@ -18,6 +18,7 @@ def detail(request, creation_id):
     #misleading name
     template = loader.get_template('monthlyinterface/details.html')
     context = {
+        'creation_id': creation_id,
         'themes': result['themes'],
         'image': result['image']
     }
@@ -40,3 +41,15 @@ def requestednewcreation(request):
     context = { 'themes': themes }
     return HttpResponse(template.render(context, request))
     # could also redirect after query is done
+
+def fork(request, creation_id):
+    result = Creation.objects.get(pk=creation_id).fork()
+    print("result from fork view:", result)
+    template = loader.get_template('monthlyinterface/details.html')
+    context = {
+        'creation_id': creation_id,
+        'themes': result['theme'],
+        'image': result['filePath']
+    }
+    return HttpResponse(template.render(context, request))
+    
