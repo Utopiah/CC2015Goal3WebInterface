@@ -1,7 +1,7 @@
 {% if latest_creation_list %}
 	<ul>
 	{% for creation in latest_creation_list %}
-		<li><a href="/monthlyinterface/{{ creation.id }}">latest_creation_list.desired_theme</a></li>
+		<li><a href="/monthlyinterface/{{ creation.id }}">{{ creation }}</li>
 	{% endfor %}
 	</ul>
 {% else %}

@@ -40,22 +40,9 @@ class Creation(models.Model):
         themes = self.desired_theme
         return dict(themes=themes, image=self.file_path)
     def fork(self):
-        # solved by moving Blend.py to the root of the django folder ../ not ./
-        #import os, sys
-        #sys.path.append(os.getcwd()+'/monthlyinterface/')
-        #print(os.getcwd()+'/monthlyinterface/')
-        # somehow does not have access to Material
         themes = str.split(self.desired_theme,",")
         return blendNewImagesFromThemes(themes)
-        #return "A blend between all or at least most of the themes " + result + " for the specified format " + '<img src="/'+self.file_path+'">'
 
-# # Integrate the result back in Django
-# 
-# ## Minimum
-# 1. load only the required functions
-# 1. modify them to save to database
-# 1. provide the result to be able to iterate on generation TODO
-# 
 # ## Optional
 # 1. use generators TODO
 
@@ -104,6 +91,7 @@ def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7):
     m1 = Material.objects.filter(source_url=loadedURLs[1])
     creation.materials.add(*m0, *m1)
     saveGeneratedImageToLibrary(image_path,result['image'])
+    # must return the new ID
     return result
 
 def isMaterialPresent(materialURL):

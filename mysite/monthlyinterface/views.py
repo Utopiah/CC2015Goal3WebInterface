@@ -51,5 +51,6 @@ def fork(request, creation_id):
         'themes': result['theme'],
         'image': result['filePath']
     }
+    # should instead redirect to the detail of the creation with the new ID
     return HttpResponse(template.render(context, request))
     
