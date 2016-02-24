@@ -1,7 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-import sys
-sys.path.insert(0, '/home/fabien/Prototypes/CC2015Goal3Month1')
+from django.shortcuts import redirect
 
 from .models import Creation
 
@@ -14,7 +13,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def detail(request, creation_id):
-    result = Creation.objects.get(pk=creation_id).generate()
+    result = Creation.objects.get(pk=creation_id).details()
     #misleading name
     template = loader.get_template('monthlyinterface/details.html')
     context = {
@@ -43,14 +42,6 @@ def requestednewcreation(request):
     # could also redirect after query is done
 
 def fork(request, creation_id):
-    result = Creation.objects.get(pk=creation_id).fork()
-    print("result from fork view:", result)
-    template = loader.get_template('monthlyinterface/details.html')
-    context = {
-        'creation_id': creation_id,
-        'themes': result['theme'],
-        'image': result['filePath']
-    }
-    # should instead redirect to the detail of the creation with the new ID
-    return HttpResponse(template.render(context, request))
-    
+    newcreationid = Creation.objects.get(pk=creation_id).fork()
+    return redirect('detail', newcreationid)
+

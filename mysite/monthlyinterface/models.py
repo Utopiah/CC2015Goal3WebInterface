@@ -33,8 +33,7 @@ class Creation(models.Model):
         return self.desired_theme
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-    def generate(self):
-        #misleading name
+    def details(self):
         # note that this should NOT be a domain specific application requiring its heavy pip install
             # but... until there are 2 or 3 of those... it better be an existing mess than an empty theoretical perfection
         themes = self.desired_theme
@@ -91,8 +90,7 @@ def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7):
     m1 = Material.objects.filter(source_url=loadedURLs[1])
     creation.materials.add(*m0, *m1)
     saveGeneratedImageToLibrary(image_path,result['image'])
-    # must return the new ID
-    return result
+    return creation.id
 
 def isMaterialPresent(materialURL):
     matches = Material.objects.filter(source_url=materialURL).count()
