@@ -34,13 +34,15 @@ class Creation(models.Model):
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
     def details(self):
-        # note that this should NOT be a domain specific application requiring its heavy pip install
-            # but... until there are 2 or 3 of those... it better be an existing mess than an empty theoretical perfection
         themes = self.desired_theme
         return dict(themes=themes, image=self.file_path)
     def fork(self):
         themes = str.split(self.desired_theme,",")
         return blendNewImagesFromThemes(themes)
+    def generate(requested_themes):
+        themes = str.split(requested_themes,",")
+        cleaned_themes = [t.strip() for t in themes if t.strip()]
+        return blendNewImagesFromThemes(cleaned_themes)
 
 # ## Optional
 # 1. use generators TODO
@@ -53,6 +55,8 @@ def pathInit():
             os.makedirs(directory)
 
 def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7):
+# usage examples
+	# blendNewImagesFromThemes(['Maldives','Diving'])
     pathInit()
     creationsPath = 'creations/'
     loadedImages = []
@@ -174,8 +178,3 @@ def saveGeneratedImageToLibrary(file_path, image):
         # allow forks
     return img
 
-# ### To faciliate database testing
-# * http://eli.thegreenplace.net/2014/02/20/clearing-the-database-with-django-commands
-
-# usage examples
-	# blendNewImagesFromThemes(['Maldives','Diving'])
