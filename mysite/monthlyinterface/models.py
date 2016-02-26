@@ -38,7 +38,7 @@ class Creation(models.Model):
         return dict(themes=themes, image=self.file_path)
     def fork(self):
         themes = str.split(self.desired_theme,",")
-        return blendNewImagesFromThemes(themes)
+        return blendNewImagesFromThemes(themes, parent_id=self.id)
     def generate(requested_themes):
         themes = str.split(requested_themes,",")
         cleaned_themes = [t.strip() for t in themes if t.strip()]
@@ -54,7 +54,7 @@ def pathInit():
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7):
+def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7, parent_id=False):
 # usage examples
 	# blendNewImagesFromThemes(['Maldives','Diving'])
     pathInit()
@@ -89,6 +89,9 @@ def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7):
                         desired_format=Desired_Format.objects.get(id=1),
                         desired_theme=','.join(Themes),
                         user_id=1)
+    if (parent_id):
+        parent_id_instance=Creation.objects.get(id=parent_id)
+        creation.parent=parent_id_instance
     creation.save()
     m0 = Material.objects.filter(source_url=loadedURLs[0])
     m1 = Material.objects.filter(source_url=loadedURLs[1])
@@ -125,8 +128,6 @@ def loadingImages(images, limit):
         if isMaterialPresent(db[imageIndex]["imageurl"]):
             materialsUsed+=1
             matches = Material.objects.filter(source_url=db[imageIndex]["imageurl"])
-
-            #print(matches, matches[0], matches[0].file_path)
             image = Image.open(matches[0].file_path)
         else:
             image = getImageFromUrl(db[imageIndex]["imageurl"])
@@ -172,9 +173,5 @@ def saveGeneratedImageToLibrary(file_path, image):
     image.convert('RGB').save(file_path)
     # improper, see name hashing done before, replicate while taking into account blending parameters
     img = Image.open(file_path)
-    # should also update the database accordingly to
-        # serve the result back to the user
-        # prevent the result from being generated again
-        # allow forks
     return img
 
