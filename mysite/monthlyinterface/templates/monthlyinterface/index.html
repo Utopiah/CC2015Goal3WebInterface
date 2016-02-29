@@ -1,7 +1,8 @@
+<h2>5 latest creations</h2>
 {% if latest_creation_list %}
 	<ul>
 	{% for creation in latest_creation_list %}
-		<li><a href="/monthlyinterface/{{ creation.id }}">{{ creation }}</li>
+		<li><a href="/monthlyinterface/{{ creation.id }}">{{ creation }}</a></li>
 	{% endfor %}
 	</ul>
 {% else %}

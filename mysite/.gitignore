@@ -1,0 +1,6 @@
+*pyc
+db.sqlite3
+.ipynb_checkpoints/
+*.ipynb
+creations/
+materials/

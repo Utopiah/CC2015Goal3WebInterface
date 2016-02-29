@@ -31,7 +31,8 @@ def requestnewcreation(request):
 
 def requestednewcreation(request):
     themes = request.POST['themes'];
-    newcreationid = Creation.generate(requested_themes=themes)
+    size = request.POST['size'];
+    newcreationid = Creation.generate(requested_themes=themes, requested_size=size)
     return redirect('detail', newcreationid)
 
 def fork(request, creation_id):

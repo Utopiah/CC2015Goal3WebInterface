@@ -1,6 +1,13 @@
+<h2>Make a new creation</h2>
 <form action="{% url 'requestednewcreation' %}" method="post">
 {% csrf_token %}
-Type below the themes you would like your postcard to have : 
-<input type="text" class="form-control" name="themes" required autofocus>
+<p>Type below the themes you would like your postcard to have (up to 2 and separate by a coma, no space allowed): </p>
+<input type="text" class="form-control" name="themes" size="100" required autofocus>
+<h3>Filters</h3>
+<h4>Size</h4>
+<ul>
+	<li><input type='radio' name='size' value="50" checked="checked">Small</li>
+	<li><input type='radio' name='size' value="200">Large</li>
+</ul>
 <input type="submit" value="Create" />
 </form>
