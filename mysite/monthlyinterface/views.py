@@ -13,10 +13,13 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def detail(request, creation_id):
-    result = Creation.objects.get(pk=creation_id).details()
+    creation = Creation.objects.get(pk=creation_id)
+    result = creation.details()
+    history = creation.history()
     template = loader.get_template('monthlyinterface/details.html')
     context = {
         'creation_id': creation_id,
+        'history': history,
         'themes': result['themes'],
         'image': result['image']
     }

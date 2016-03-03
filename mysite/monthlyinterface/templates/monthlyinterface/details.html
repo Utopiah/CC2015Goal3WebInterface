@@ -2,3 +2,12 @@ A blend between all or at least most of the themes {{ themes }} for the specifie
 
 <a href="/monthlyinterface/{{ creation_id }}/fork">Fork</a>
 {#<a href="{% url 'requestnewcreation' %}">Create from scratch</a>#}
+
+<h3>Previous creations that lead to the current one:</h3>
+<ul>
+{% for creation in history %}
+<li><a href="/monthlyinterface/{{ creation.id }}/">{{ creation }}</a></li>
+{% empty %}
+<li>No history available.</li>
+{% endfor %}
+</ul>
