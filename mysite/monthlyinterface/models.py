@@ -43,6 +43,11 @@ class Creation(models.Model):
         themes = str.split(requested_themes,",")
         cleaned_themes = [t.strip() for t in themes if t.strip()]
         return blendNewImagesFromThemes(cleaned_themes, imageSize=int (requested_size))
+    def history(self):
+        parent = self.parent
+        while (parent):
+            yield parent
+            parent = Creation.objects.get(id=parent.id).parent
 
 # ## Optional
 # 1. use generators TODO
