@@ -16,7 +16,7 @@ def detail(request, creation_id):
     creation = Creation.objects.get(pk=creation_id)
     result = creation.details()
     history = creation.history()
-    template = loader.get_template('monthlyinterface/details.html')
+    template = loader.get_template('monthlyinterface/detail.html')
     context = {
         'creation_id': creation_id,
         'history': history,

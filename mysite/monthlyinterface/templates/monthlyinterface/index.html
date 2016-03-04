@@ -2,7 +2,7 @@
 {% if latest_creation_list %}
 	<ul>
 	{% for creation in latest_creation_list %}
-		<li><a href="/monthlyinterface/{{ creation.id }}">{{ creation }}</a></li>
+		<li><a href="{% url 'detail' creation.id %}">{{ creation }}</a></li>
 	{% endfor %}
 	</ul>
 {% else %}
