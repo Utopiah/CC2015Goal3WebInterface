@@ -1,0 +1,10 @@
+<h2>creations</h2>
+{% if creation_list %}
+	<ul>
+	{% for creation in creation_list %}
+		<li><a href="{% url 'detail' creation.id %}">{{ creation }}</a></li>
+	{% endfor %}
+	</ul>
+{% else %}
+	<p>No creations to display... make some!</p>
+{% endif %}

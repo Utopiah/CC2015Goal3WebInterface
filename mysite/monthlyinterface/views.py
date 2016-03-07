@@ -35,10 +35,26 @@ def requestnewcreation(request):
 def requestednewcreation(request):
     themes = request.POST['themes'];
     size = request.POST['size'];
-    newcreationid = Creation.generate(requested_themes=themes, requested_size=size)
-    return redirect('detail', newcreationid)
+    quantity_requested = 1;
+    creations = Creation.generate(requested_themes=themes, requested_size=size, quantity=quantity_requested)
+    if quantity_requested == 1:
+        return redirect('detail', list(creations)[0])
+        # basically losing, or rather not displaying all remaining created oned n+1, n+2, etc
+        # should instead redirect if only one creation and if more display a list
+    else :
+        return redirect('specificlist', list(creations))
+        # see http://stackoverflow.com/questions/249110/django-arbitrary-number-of-unnamed-urls-py-parameters
 
 def fork(request, creation_id):
     newcreationid = Creation.objects.get(pk=creation_id).fork()
     return redirect('detail', newcreationid)
+
+def specificlist(request, creation_list):
+    #latest_creation_list = Creation.objects.order_by('-pub_date')[:5]
+    # copied from index view
+    template = loader.get_template('monthlyinterface/specificlist.html')
+    context = {
+        'creation_list': creation_list
+    }
+    return HttpResponse(template.render(context, request))
 

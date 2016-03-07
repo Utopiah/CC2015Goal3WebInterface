@@ -36,13 +36,15 @@ class Creation(models.Model):
     def details(self):
         themes = self.desired_theme
         return dict(themes=themes, image=self.file_path)
-    def fork(self):
+    def fork(self, iterations=1):
         themes = str.split(self.desired_theme,",")
         return blendNewImagesFromThemes(themes, parent_id=self.id)
-    def generate(requested_themes, requested_size):
+    def generate(requested_themes, requested_size, quantity=1):
         themes = str.split(requested_themes,",")
         cleaned_themes = [t.strip() for t in themes if t.strip()]
-        return blendNewImagesFromThemes(cleaned_themes, imageSize=int (requested_size))
+        while (quantity > 0):
+            yield blendNewImagesFromThemes(cleaned_themes, imageSize=int (requested_size))
+            quantity -= 1
     def history(self):
         parent = self.parent
         while (parent):
