@@ -12,6 +12,10 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
+def mergewith(request, creation_id, other_id):
+    creation = Creation.objects.get(pk=creation_id)
+    return HttpResponse(creation.mergewith(other_id))
+
 def detail(request, creation_id):
     creation = Creation.objects.get(pk=creation_id)
     result = creation.details()

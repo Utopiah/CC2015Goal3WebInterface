@@ -48,6 +48,12 @@ class Creation(models.Model):
         while (parent):
             yield parent
             parent = Creation.objects.get(id=parent.id).parent
+    def mergewith(self, other_creation_id):
+        other_creation=Creation.objects.get(id=other_creation_id)
+        ids = [self.id, other_creation.id]
+        themes = list(set(str.split(self.desired_theme + "," + other_creation.desired_theme, ",")))
+        return blendNewImagesFromImages(themes, parent_id=ids)
+        
 
 # ## Optional
 # 1. use generators TODO
@@ -58,6 +64,53 @@ def pathInit():
     for directory in ['creations','materials']:
         if not os.path.exists(directory):
             os.makedirs(directory)
+
+def blendNewImagesFromImages(Themes, imageSize=50, opacity=0.7, parent_id=False):
+# usage examples
+	# blendNewImagesFromThemes(['Maldives','Diving'])
+    pathInit()
+    creationsPath = 'creations/'
+    loadedImages = []
+    loadedURLs = []
+    images = []
+    urls = []
+    return [Themes, parent_id]
+    for Theme in Themes:
+        #for the moment assuming 2 themes or less
+        images = addImageToLibrary(Theme, 10)
+        if len(Themes) == 1:
+            [images, urls] = loadingImages(images, 1)
+        else:
+            [images, urls] = loadingImages(images, 2)
+        loadedImages.extend(images)
+        loadedURLs.extend(urls) 
+    blendedImage = imagesBlend(loadedImages, imageSize, opacity)
+    import hashlib
+    from PIL import Image
+    usedConfiguration = '_'.join(loadedURLs[:2])+'_'.join(Theme)+str(imageSize)+str(opacity)
+    image_path = creationsPath+hashlib.md5(usedConfiguration.encode('utf-8')).hexdigest()
+    image_path += ".jpg"
+    result = dict(image=blendedImage,
+                  theme=Themes, 
+                  imageSize=imageSize, 
+                  opacity=opacity,
+                  filePath=image_path,
+                  usedURLs=loadedURLs[:2])
+    creation = Creation(file_path=image_path, opacity=opacity, image_size=imageSize,
+                        pub_date=timezone.now(),
+                        desired_format=Desired_Format.objects.get(id=1),
+                        desired_theme=','.join(Themes),
+                        user_id=1)
+    if (parent_id):
+        parent_id_instance=Creation.objects.get(id=parent_id)
+        creation.parent=parent_id_instance
+    creation.save()
+    m0 = Material.objects.filter(source_url=loadedURLs[0])
+    m1 = Material.objects.filter(source_url=loadedURLs[1])
+    creation.materials.add(*m0, *m1)
+    saveGeneratedImageToLibrary(image_path,result['image'])
+    return creation.id
+
 
 def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7, parent_id=False):
 # usage examples
