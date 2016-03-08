@@ -1,0 +1,7 @@
+<h2>Make a new creation</h2>
+<form action="{% url 'mergewith' %}" method="post">
+{% csrf_token %}
+<p>Type below the id of the creation you want to merge with : </p>
+<input type="text" class="form-control" name="themes" size="5" required autofocus>
+<input type="submit" value="Merge" />
+</form>
