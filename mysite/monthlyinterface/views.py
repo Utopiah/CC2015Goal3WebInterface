@@ -14,7 +14,8 @@ def index(request):
 
 def mergewith(request, creation_id, other_id):
     creation = Creation.objects.get(pk=creation_id)
-    return HttpResponse(creation.mergewith(other_id))
+    newcreationid = creation.mergewith(other_id)
+    return redirect('detail', newcreationid)
 
 def detail(request, creation_id):
     creation = Creation.objects.get(pk=creation_id)

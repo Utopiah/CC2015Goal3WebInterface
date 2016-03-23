@@ -66,6 +66,9 @@ def pathInit():
             os.makedirs(directory)
 
 def blendNewImagesFromImages(Themes, imageSize=50, opacity=0.7, parent_id=False):
+    return 0
+    import hashlib
+    from PIL import Image
 # usage examples
 	# blendNewImagesFromThemes(['Maldives','Diving'])
     pathInit()
@@ -74,20 +77,11 @@ def blendNewImagesFromImages(Themes, imageSize=50, opacity=0.7, parent_id=False)
     loadedURLs = []
     images = []
     urls = []
-    return [Themes, parent_id]
-    for Theme in Themes:
-        #for the moment assuming 2 themes or less
-        images = addImageToLibrary(Theme, 10)
-        if len(Themes) == 1:
-            [images, urls] = loadingImages(images, 1)
-        else:
-            [images, urls] = loadingImages(images, 2)
-        loadedImages.extend(images)
-        loadedURLs.extend(urls) 
+    for parent in parent_id:
+        image = Image.open( Creation.objects.get(id=parent).file_path )
+        loadedImages.append ( image )
     blendedImage = imagesBlend(loadedImages, imageSize, opacity)
-    import hashlib
-    from PIL import Image
-    usedConfiguration = '_'.join(loadedURLs[:2])+'_'.join(Theme)+str(imageSize)+str(opacity)
+    usedConfiguration = '_'.join(loadedURLs[:2])+'_'.join(Themes)+str(imageSize)+str(opacity)
     image_path = creationsPath+hashlib.md5(usedConfiguration.encode('utf-8')).hexdigest()
     image_path += ".jpg"
     result = dict(image=blendedImage,
@@ -101,10 +95,10 @@ def blendNewImagesFromImages(Themes, imageSize=50, opacity=0.7, parent_id=False)
                         desired_format=Desired_Format.objects.get(id=1),
                         desired_theme=','.join(Themes),
                         user_id=1)
-    if (parent_id):
-        parent_id_instance=Creation.objects.get(id=parent_id)
-        creation.parent=parent_id_instance
     creation.save()
+    p0 = Creation.objects.get(id=parent_id[0])
+    p1 = Creation.objects.get(id=parent_id[1])
+    creation.parent.add(*p0, *p1)
     m0 = Material.objects.filter(source_url=loadedURLs[0])
     m1 = Material.objects.filter(source_url=loadedURLs[1])
     creation.materials.add(*m0, *m1)
