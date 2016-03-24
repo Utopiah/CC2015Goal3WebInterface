@@ -98,7 +98,7 @@ def blendNewImagesFromImages(Themes, imageSize=50, opacity=0.7, parent_id=False)
     creation.save()
     p0 = Creation.objects.get(id=parent_id[0])
     p1 = Creation.objects.get(id=parent_id[1])
-    creation.parent.add(*p0, *p1)
+    creation.parent.add(p0, p1)
     m0 = Material.objects.filter(source_url=loadedURLs[0])
     m1 = Material.objects.filter(source_url=loadedURLs[1])
     creation.materials.add(*m0, *m1)
@@ -118,6 +118,11 @@ def blendNewImagesFromThemes(Themes, imageSize=50, opacity=0.7, parent_id=False)
     for Theme in Themes:
         #for the moment assuming 2 themes or less
         images = addImageToLibrary(Theme, 10)
+        if images["status"] == "failed":
+            from django.shortcuts import redirect
+            return redirect('remote image fetching server error')
+            # return to a non existing image if the image gathering website has a problem
+            # should throw an exception instead or directly redirect ...
         if len(Themes) == 1:
             [images, urls] = loadingImages(images, 1)
         else:
@@ -171,6 +176,7 @@ def imagesBlend(loadedImages, imageSize, opacity):
     return Image.blend(cleanDB[0], cleanDB[1], opacity)
 
 def loadingImages(images, limit):
+    # print("loadedImages: ",images)
     from PIL import Image
     db = images["images"]
     loadedImages = []
