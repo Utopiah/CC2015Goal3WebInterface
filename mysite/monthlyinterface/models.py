@@ -28,7 +28,8 @@ class Creation(models.Model):
     desired_theme = models.CharField(max_length=200, blank=False, default="unset")
     pub_date = models.DateTimeField('date created')
     desired_format = models.ForeignKey(Desired_Format)
-    parent = models.ForeignKey('self', null=True, blank=True)
+    #parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ManyToManyField('self')
     def __str__(self):
         return self.desired_theme
     def was_published_recently(self):
@@ -66,7 +67,7 @@ def pathInit():
             os.makedirs(directory)
 
 def blendNewImagesFromImages(Themes, imageSize=50, opacity=0.7, parent_id=False):
-    return 0
+    #return 0
     import hashlib
     from PIL import Image
 # usage examples
@@ -96,6 +97,7 @@ def blendNewImagesFromImages(Themes, imageSize=50, opacity=0.7, parent_id=False)
                         desired_theme=','.join(Themes),
                         user_id=1)
     creation.save()
+    print("Creation after save", creation)
     p0 = Creation.objects.get(id=parent_id[0])
     p1 = Creation.objects.get(id=parent_id[1])
     creation.parent.add(p0, p1)
